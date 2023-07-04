@@ -2,6 +2,11 @@
 
 #Create a spark environment from docker compose
 
+# spark
+Spark Master: http://localhost:9090
+Spark Worker A: http://localhost:9091
+Spark Worker B: http://localhost:9092
+
 # pgadmin
 run on host http://localhost:5050/
 use password from DB to connect

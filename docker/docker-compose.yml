@@ -1,5 +1,86 @@
 version: '3.9'
 services:
+# spark
+    spark_master:
+        hostname: spark_master
+        container_name: spark_master
+        build:
+            #path to docker files folder
+            context: ./docker_files/spark
+            #docker file name for spark in docker files folder
+            dockerfile: dockerfile_spark
+        volumes:
+            #path to file share
+            - ./file_share/spark/:/opt/spark-apps
+            - ./file_share/spark/:/opt/spark-data
+        ports:
+            - "9090:8080"
+            - "7077:7077"
+        networks:
+            - spark
+        environment:
+            - SPARK_LOCAL_IP=spark-master
+            - SPARK_WORKLOAD=master
+
+    spark_worker_a:
+        hostname: spark_worker_a
+        container_name: spark_worker_a
+        build:
+            #path to docker files folder
+            context: ./docker_files/spark
+            #docker file name for spark in docker files folder
+            dockerfile: dockerfile_spark
+        volumes:
+            #path to file share
+            - ./file_share/spark/:/opt/spark-apps
+            - ./file_share/spark/:/opt/spark-data
+        ports:
+            - "9091:8080"
+            - "7000:7000"
+        networks:
+            - spark
+        depends_on:
+            - spark_master
+        environment:
+            - SPARK_MASTER=spark://spark_master:7077
+            - SPARK_WORKER_CORES=1
+            - SPARK_WORKER_MEMORY=1G
+            - SPARK_DRIVER_MEMORY=1G
+            - SPARK_EXECUTOR_MEMORY=1G
+            - SPARK_WORKLOAD=worker
+            - SPARK_LOCAL_IP=spark_worker_a
+
+    spark_worker_b:
+        hostname: spark_worker_b
+        container_name: spark_worker_b
+        build:
+            #path to docker files folder
+            context: ./docker_files/spark
+            #docker file name for spark in docker files folder
+            dockerfile: dockerfile_spark
+        volumes:
+            #path to file share
+            - ./file_share/spark/:/opt/spark-apps
+            - ./file_share/spark/:/opt/spark-data
+        ports:
+            - "9092:8080"
+            - "7001:7000"
+        networks:
+            - spark
+        depends_on:
+            - spark_master
+        environment:
+            - SPARK_MASTER=spark://spark_master:7077
+            - SPARK_WORKER_CORES=1
+            - SPARK_WORKER_MEMORY=1G
+            - SPARK_DRIVER_MEMORY=1G
+            - SPARK_EXECUTOR_MEMORY=1G
+            - SPARK_WORKLOAD=worker
+            - SPARK_LOCAL_IP=spark_worker_b
+        
+        
+
+
 # python IDE in container
     jupyter:
         hostname: jupyter
