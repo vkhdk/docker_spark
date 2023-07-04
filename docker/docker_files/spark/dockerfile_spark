@@ -1,2 +1,2 @@
 # link to the container image
-FROM cluster-apache-spark:3.0.2
+FROM docker.io/bitnami/spark:3.4
