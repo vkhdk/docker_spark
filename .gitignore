@@ -12,3 +12,6 @@
 
 #pgadmin data
 /docker/file_share/pgadmin_data
+
+#spark
+/docker/file_share/spark
